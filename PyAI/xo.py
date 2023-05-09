@@ -14,6 +14,16 @@ T=0
 data=[
     [
         [
+            [0,1,0,0,0,0,1],
+            [0,0,1,0,0,0,1],
+            [0,0,1,0,0,1,0],
+            [0,0,0,1,0,1,0],
+            [0,0,0,0,1,0,0],
+            [0,0,0,1,0,1,0],
+            [0,0,1,0,0,0,1]
+            ],1],
+    [
+        [
             [0,0,1,1,0,0,0],
             [0,1,0,0,1,1,0],
             [0,1,0,0,0,0,1],
@@ -269,7 +279,9 @@ class Model:
         #print(inputs)
         for i in range(len(inputs)):
             for x in range(len(inputs[i])):
-                say=self.N[i][x].feedforward(inputs[i][x])
+                aa=inputs[i][x]
+                #print(len(self.N),len(inputs))
+                say=self.N[i][x].feedforward(aa)
                 v.append(say)
             h.append(v)
             v=None
@@ -289,6 +301,7 @@ class Model:
                 #print(x[z])
                 conv=Conv(x[0])
                 #print('d')
+                #print(x[0])
                 gt=self.feedforward(x[0])
                 #print(x)
                 h=[]
@@ -311,8 +324,8 @@ class Model:
                 #print('d')
                 #print(T,gt)
                 #print(i)
-                if i % 10 == 0:
-                    print(i,abs(T-gt))
+            if i % 100 == 0:
+                print(i,abs(T-gt))
 
                         
                 
@@ -322,24 +335,31 @@ def Conv(W):
     global X
     rt=[]
     v=[]
+    vv=[]
     q=0
-    for i in range(0,4,2):#0, len(X)-3, 2
-        for o in range(0,4,2):#0, len(X[i])-3, 2
-            for y in range(3):
-                for x in range(3):
-                    #print(W)
-                    XX=X[i+y][o+x]
-                    #print(W)
-                    #print(W)
-                    WWW=W[i+y]
-                    #print(o,x,WWW)
-                    WW=WWW[o+x]
-                    q+=XX*WW
-            v.append(q)
+    for ii in range(0,4,2):
+        for oo in range(0,4,2):
+            for i in range(0,4,2):#0, len(X)-3, 2
+                for o in range(0,4,2):#0, len(X[i])-3, 2
+                    for y in range(3):
+                        for x in range(3):
+                            #print(W)
+                            XX=X[ii+y][oo+x]
+                            #print(W)
+                            #print(W)
+                            WWW=W[i+y]
+                            #print(o,x,WWW)
+                            WW=WWW[o+x]
+                            q+=XX*WW
+                    vv.append(q)
+            qq=np.mean(vv)
+            vv=None
+            vv=[]
+            v.append(qq)
         rt.append(v)
         v=None
         v=[]
-        #print('f',rt)
+                #print('f',rt)
     return rt
         
 
@@ -371,6 +391,7 @@ mode.train(1000)
 
 
 
+
 #test the model
 input("Pause enter to continue...")
 """test = [
@@ -381,8 +402,8 @@ input("Pause enter to continue...")
     [0,0,0,0,1,0,0],
     [0,0,0,1,0,1,0],
     [0,0,1,0,0,0,1]
-    ]
-"""
+    ]"""
+
 test = [
     [0,0,1,1,0,0,0],
     [0,1,0,0,1,1,0],
@@ -392,6 +413,15 @@ test = [
     [0,1,1,0,1,0,0],
     [0,0,0,1,1,0,0]
     ]
+"""test=[
+    [1,0,0,0,0,0,1],
+    [0,1,0,0,0,1,0],
+    [0,0,1,0,1,0,0],
+    [0,0,0,1,0,0,0],
+    [0,0,1,0,1,0,0],
+    [0,1,0,0,0,1,0],
+    [1,0,0,0,0,0,1]
+    ]"""
 
 for i in test:
     for x in i:
